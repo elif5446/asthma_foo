@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "breatheez",
+    "slug": "breatheez",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.breatheez",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We need your location for...",
+        "NSLocationAlwaysUsageDescription": "We need your location even when the app is not in use...",
+        "NSMicrophoneUsageDescription": "This app uses the microphone to enable text-to-speech functionality."
+      }
+    },
+    "android": {
+      "package": "com.anonymous.breatheez",
+      "permissions": [
+        "android.permission.INTERNET",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow BreatheEz to use your location."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
