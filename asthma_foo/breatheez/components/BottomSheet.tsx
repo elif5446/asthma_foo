@@ -18,8 +18,6 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 import axios from "axios";
-import useSliderLogic from "@/hooks/sliderLogic";
-import { AQIContext } from "@/context/AQIContext";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 130;
@@ -35,13 +33,67 @@ interface BottomSheetProps {
 }
 
 const CustomSlider = () => {
-  const { value, setValue, stopPoints, snapValue, currentLabel } =
-    useSliderLogic();
+  const [value, setValue] = useState(0);
+
+  // Define stop points as an array of objects with value and label
+  const stopPoints = [
+    { value: 0, label: "Normal" },
+    { value: 33.3, label: "Sensitive" },
+    { value: 66.6, label: "Asthmatic" },
+    { value: 100, label: "Severe Asthma" },
+  ];
+
+  // Function to round the value to the nearest stop point
+  const snapValue = (value: number) => {
+    let closest = stopPoints[0].value;
+    let minDifference = Math.abs(value - closest);
+
+    stopPoints.forEach((point) => {
+      const difference = Math.abs(value - point.value);
+      if (difference < minDifference) {
+        closest = point.value;
+        minDifference = difference;
+      }
+    });
+
+    // Round the closest value to one decimal place to avoid floating-point precision issues
+    return Math.round(closest * 10) / 10;
+  };
+
+  // Find the label for the current value
+  const currentLabel =
+    stopPoints.find((point) => Math.abs(point.value - value) < 0.1)?.label ||
+    "";
+
+  // Function to determine AQI status based on the current value and patient condition
+  const getAqiStatus = (value: number, condition: string) => {
+    if (condition === "Normal") {
+      if (value <= 50) return "Good";
+      else if (value <= 95) return "Acceptable";
+      else return "Bad";
+    } else if (condition === "Sensitive") {
+      if (value <= 30) return "Good";
+      else if (value <= 70) return "Acceptable";
+      else return "Bad";
+    } else if (condition === "Asthmatic") {
+      if (value <= 20) return "Good";
+      else if (value <= 50) return "Acceptable";
+      else return "Bad";
+    } else if (condition === "Severe Asthma") {
+      if (value <= 10) return "Good";
+      else if (value <= 30) return "Acceptable";
+      else return "Bad";
+    }
+    return "Unknown";
+  };
+
+  // Get the AQI status based on the current value and patient condition
+  const aqiStatus = getAqiStatus(value, currentLabel);
 
   return (
-    <View style={styles.container}>
+    <View style={styles1.container}>
       <Text style={{ fontWeight: "bold" }}>
-        Lungs Condition: {currentLabel}
+        Value: {value} ({currentLabel})
       </Text>
       <Slider
         style={{ width: 300, height: 40 }}
@@ -51,13 +103,15 @@ const CustomSlider = () => {
         value={value}
         onValueChange={(val) => setValue(snapValue(val))}
       />
-      <View style={styles.labelsContainer}>
+      <View style={styles1.labelsContainer}>
         {stopPoints.map((point, index) => (
-          <Text key={index} style={styles.label}>
+          <Text key={index} style={styles1.label}>
             {point.label}
           </Text>
         ))}
       </View>
+      {/* Display AQI status */}
+      <Text style={styles1.aqiStatus}>AQI Status: {aqiStatus}</Text>
     </View>
   );
 };
@@ -66,7 +120,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
   setSelectedLocation,
   searchLocation,
 }) => {
-  const { setAqi } = useContext(AQIContext);
   const { latitude, longitude, errorMsg } = useLocation();
   const [airQualityData, setAirQualityData] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -80,7 +133,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
       const response = await axios.get(apiUrl);
       setAirQualityData(response.data);
-      setAqi(response.data.data.aqi);
       setLoading(false);
     } catch (err) {
       setApiError("Error fetching air quality data");
@@ -142,7 +194,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
       borderRadius,
     };
   });
-
+  const stringbruh = "";
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
@@ -292,5 +344,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#000",
     textAlign: "center",
+  },
+});
+
+const styles1 = StyleSheet.create({
+  container: {
+    padding: 40,
+    alignItems: "center",
+  },
+  labelsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 300,
+    marginTop: 10,
+  },
+  label: {
+    fontSize: 12,
+    color: "#000",
+    textAlign: "center",
+  },
+  aqiStatus: {
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
   },
 });

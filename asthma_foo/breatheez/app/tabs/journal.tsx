@@ -55,28 +55,28 @@ const Page = () => {
   //   fetchUserIdAndEntries();
   // }, []);
 
-  // ✅ Fetch journal entries from backend
+  // Fetch journal entries from backend
   useEffect(() => {
     const fetchUserEntries = async () => {
       try {
         const userId = await AsyncStorage.getItem("userId"); // Retrieve user ID
 
         if (!userId) {
-          console.error("❌ No user ID found.");
+          console.error("No user ID found.");
           return;
         }
         setLoading(true);
-        console.log("🔍 Fetching journal entries for userId:", userId);
+        console.log("Fetching journal entries for userId:", userId);
 
         const response = await axios.get(
           `${REACT_NATIVE_BACKEND_URL}api/journal/${userId}`
         );
 
         if (!response.data.length) {
-          console.log("ℹ️ No journal entries found for this user.");
+          console.log("No journal entries found for this user.");
         }
 
-        // 🏆 Sort entries by date (assuming date is in a standard format)
+        // Sort entries by date (assuming date is in a standard format)
         const sortedEntries = response.data.sort(
           (a: Entry, b: Entry) =>
             new Date(b.dateCreated).getTime() -
@@ -85,7 +85,7 @@ const Page = () => {
 
         setEntries(sortedEntries);
       } catch (error) {
-        console.error("❌ Error fetching journal entries:", error);
+        console.error("Error fetching journal entries:", error);
       } finally {
         setLoading(false);
       }
@@ -96,22 +96,22 @@ const Page = () => {
   // Save new journal entry
   const handleSave = async () => {
     if (!asthmaAttack.trim() || !symptoms.trim()) {
-      console.error("❌ Required fields missing");
+      console.error("Required fields missing");
       return;
     }
 
     try {
-      // ✅ Retrieve userId from AsyncStorage
+      // Retrieve userId from AsyncStorage
       const storedUserId = await AsyncStorage.getItem("userId");
 
       if (!storedUserId) {
-        console.error("❌ No userId found in AsyncStorage.");
+        console.error("No userId found in AsyncStorage.");
         return;
       }
 
-      console.log("✅ Retrieved userId:", storedUserId); // Debugging log
+      console.log("Retrieved userId:", storedUserId); // Debugging log
 
-      // ✅ Create new entry including userId
+      // Create new entry including userId
       const newEntry: Entry = {
         id: Date.now().toString(),
         userId: storedUserId, // Attach the userId to the entry
@@ -123,8 +123,8 @@ const Page = () => {
 
       // Sending entry to mongoDB
       const requestUrl = `${REACT_NATIVE_BACKEND_URL}api/journal`;
-      console.log("🌍 Sending journal entry to:", requestUrl);
-      console.log("📤 Journal Entry Data:", newEntry);
+      console.log("Sending journal entry to:", requestUrl);
+      console.log("Journal Entry Data:", newEntry);
 
       const response = await axios.post(requestUrl, newEntry, {
         headers: {
@@ -133,19 +133,19 @@ const Page = () => {
       });
 
       if (response.status === 201) {
-        console.log("✅ Journal entry saved in MongoDB!", response.data);
+        console.log("Journal entry saved in MongoDB!", response.data);
 
-        // ✅ Add entry to local state
+        // Add entry to local state
         setEntries([newEntry, ...entries]);
 
-        // ✅ Reset input fields & close modal
+        // Reset input fields & close modal
         setAsthmaAttack("");
         setSymptoms("");
         setComments("");
         setModalVisible(false);
       }
     } catch (error) {
-      console.error("❌ Error retrieving userId:", error);
+      console.error("Error retrieving userId:", error);
     }
   };
 
@@ -322,9 +322,9 @@ export default Page;
 const styles = StyleSheet.create({
   imageContainer: {
     backgroundColor: "center",
-    flexDirection: "row", // ✅ Puts items in a row (side by side)
-    alignItems: "center", // ✅ Aligns text and image vertically
-    justifyContent: "flex-start", // ✅ Centers everything horizontally
+    flexDirection: "row", // Puts items in a row (side by side)
+    alignItems: "center", // Aligns text and image vertically
+    justifyContent: "flex-start", // Centers everything horizontally
     marginTop: 30,
     marginBottom: 30,
     borderRadius: 10,
@@ -344,9 +344,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   headerContainer: {
-    flexDirection: "row", // ✅ Puts items in a row (side by side)
-    alignItems: "center", // ✅ Aligns text and image vertically
-    justifyContent: "center", // ✅ Centers everything horizontally
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 10,
     borderRadius: 10,
     paddingHorizontal: 20,
@@ -362,18 +362,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   headerImage: {
-    width: 40, // ✅ Adjust image width
-    height: 40, // ✅ Adjust image height
-    resizeMode: "contain", // ✅ Ensures image fits inside box
+    width: 40, // Adjust image width
+    height: 40, // Adjust image height
+    resizeMode: "contain", // Ensures image fits inside box
   },
   modalContainer1: {
     flex: 1,
     backgroundColor: "#F0F0F0",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 15, // ✅ More rounded corners
-    borderWidth: 1, // ✅ Adds a light border
-    borderColor: "#E0E0E0", // ✅ Light gray border for a clean look
+    borderRadius: 15, // More rounded corners
+    borderWidth: 1, // Adds a light border
+    borderColor: "#E0E0E0", // Light gray border for a clean look
   },
   modalContent1: {
     backgroundColor: "white",
@@ -426,12 +426,12 @@ const styles = StyleSheet.create({
   },
   headerImage1: {
     marginTop: 120,
-    width: 60, // ✅ Adjust image width
-    height: 60, // ✅ Adjust image height
-    resizeMode: "contain", // ✅ Ensures image fits inside box
-    position: "absolute", // ✅ Moves the image freely inside the container
-    top: 0, // ✅ Places the image at the top
-    alignSelf: "center", // ✅ Ensures it's horizontally centered
+    width: 60, // Adjust image width
+    height: 60, // Adjust image height
+    resizeMode: "contain", // Ensures image fits inside box
+    position: "absolute", // Moves the image freely inside the container
+    top: 0, // Places the image at the top
+    alignSelf: "center", // Ensures it's horizontally centered
   },
   entryDate1: {
     textAlign: "center",

@@ -43,7 +43,7 @@ const moveDirectories = async () => {
   try {
     // Create the app-example directory
     await fs.promises.mkdir(newDirPath, { recursive: true });
-    console.log(`📁 /${newDir} directory created.`);
+    console.log(`/${newDir} directory created.`);
 
     // Move old directories to new app-example directory
     for (const dir of oldDirs) {
@@ -60,19 +60,19 @@ const moveDirectories = async () => {
     // Create new /app directory
     const newAppDirPath = path.join(root, newAppDir);
     await fs.promises.mkdir(newAppDirPath, { recursive: true });
-    console.log("\n📁 New /app directory created.");
+    console.log("\nNew /app directory created.");
 
     // Create index.tsx
     const indexPath = path.join(newAppDirPath, "index.tsx");
     await fs.promises.writeFile(indexPath, indexContent);
-    console.log("📄 app/index.tsx created.");
+    console.log("App/index.tsx created.");
 
     // Create _layout.tsx
     const layoutPath = path.join(newAppDirPath, "_layout.tsx");
     await fs.promises.writeFile(layoutPath, layoutContent);
-    console.log("📄 app/_layout.tsx created.");
+    console.log("app/_layout.tsx created.");
 
-    console.log("\n✅ Project reset complete. Next steps:");
+    console.log("\nProject reset complete. Next steps:");
     console.log(
       "1. Run `npx expo start` to start a development server.\n2. Edit app/index.tsx to edit the main screen.\n3. Delete the /app-example directory when you're done referencing it."
     );

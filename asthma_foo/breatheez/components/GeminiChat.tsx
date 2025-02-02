@@ -1,100 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   FlatList,
-//   StyleSheet,
-//   ActivityIndicator,
-// } from "react-native";
-// import * as GoogleGenerativeAI from "@google/generative-ai";
-
-// type Message = {
-//   text: string;
-//   user: boolean;
-// };
-
-// const GeminiChat = () => {
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [userInput, setUserInput] = useState("");
-//   const [inputHeight, setInputHeight] = useState(40);
-//   const [loading, setLoading] = useState(false);
-
-//   const GGL_API_KEY = "AIzaSyD4nK92b38N-l8Pt3AtfWf02Gr3Wh6RQig";
-
-//   useEffect(() => {
-//     const StartChat = async () => {
-//       const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(GGL_API_KEY);
-//       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-//       const prompt = "hello";
-//       const result = await model.generateContent(prompt);
-//       const response = result.response;
-//       const text = response.text();
-//       console.log(text);
-
-//       setMessages([
-//         {
-//           text,
-//           user: false,
-//         },
-//       ]);
-//     };
-//     StartChat();
-//   }, []);
-
-//   const renderMessage = ({ item }) => {
-//     <View>
-//       <Text style={[styles.messagesText, item.user & styles.userMessage]}>
-//         {item.text}
-//       </Text>
-//     </View>;
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <FlatList
-//         data={messages}
-//         renderItem={renderMessage}
-//         keyExtractor={(item) => index.text}
-//       />
-//       <View style={styles.inputContainer}>
-//         <TextInput
-//           style={[styles.inputBar, { height: inputHeight }]}
-//           placeholder="Type a message to start chatting with Chip!"
-//           placeholderTextColor="#36454F"
-//           onChangeText={setUserInput}
-//           value={userInput}
-//           multiline
-//         />
-//         {loading && <ActivityIndicator size="small" color="black" />}
-//       </View>
-//     </View>
-//   );
-// };
-
-// export default GeminiChat;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 50,
-//   },
-//   messagesText: {},
-//   text: {},
-//   inputContainer: {
-//     flex: 1,
-//     marginTop: 50,
-//     padding: 15,
-//   },
-//   inputBar: {
-//     borderWidth: 1,
-//     borderColor: "grey",
-//     padding: 10,
-//     margin: 10,
-//     borderRadius: 15,
-//     backgroundColor: "#BDB5D5",
-//     width: 380,
-//   },
-// });
 import React, { useState, useEffect } from "react";
 import * as GoogleGenerativeAI from "@google/generative-ai";
 import {
@@ -117,7 +20,7 @@ const GeminiChat = () => {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API_KEY = "AIzaSyD4nK92b38N-l8Pt3AtfWf02Gr3Wh6RQig"; // Add your Gemini API key here
+  const API_KEY = "AIzaSyD4nK92b38N-l8Pt3AtfWf02Gr3Wh6RQig"; // Gemini API key
 
   useEffect(() => {
     const startChat = async () => {
