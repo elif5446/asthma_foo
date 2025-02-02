@@ -31,7 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="data"
         options={{
-          title: "Data",
+          title: "Chip Chat",
           tabBarIcon: ({ color, size }) => (
             <Entypo name="bar-graph" size={size} color={color} />
           ),

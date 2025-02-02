@@ -40,7 +40,7 @@ const RegisterScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>BreatheEz</Text>
+      <Text style={styles.title}>chip</Text>
       <Text style={styles.title1}>Your Breathing Companion</Text>
       <View style={styles.imageContainer}>
         <Image

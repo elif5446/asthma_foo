@@ -24,23 +24,23 @@ const GeminiChat = () => {
 
   useEffect(() => {
     const startChat = async () => {
-      const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const prompt = "hello!";
-      const result = await model.generateContent(prompt);
-      const response = result.response;
-      const text = response.text();
-      console.log(text);
+      // Hardcoded first AI message
+      const personalizedMessage =
+        "Hello! I'm Chip, your friendly AI assistant. How can I help you today?";
+
+      // Show the flash message
       showMessage({
         message: "Welcome to Gemini Chat 🤖",
-        description: text,
+        description: personalizedMessage,
         type: "info",
         icon: "info",
         duration: 2000,
       });
+
+      // Set the first AI message directly
       setMessages([
         {
-          text,
+          text: personalizedMessage,
           user: false,
         },
       ]);
@@ -85,7 +85,7 @@ const GeminiChat = () => {
       />
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="Type a message"
+          placeholder="Start chatting with Chip..."
           onChangeText={setUserInput}
           value={userInput}
           onSubmitEditing={sendMessage}
@@ -98,7 +98,7 @@ const GeminiChat = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingTop: 50 },
+  container: { flex: 1, backgroundColor: "#fff", paddingTop: 50, width: 430 },
   flatList: { flex: 1, paddingBottom: 10 },
   messageContainer: {
     maxWidth: "80%",
@@ -109,13 +109,15 @@ const styles = StyleSheet.create({
   },
   userMessage: {
     alignSelf: "flex-end",
-    backgroundColor: "#0084ff",
+    backgroundColor: "#707070",
     color: "#fff",
+    marginRight: 18,
   },
   aiMessage: {
     alignSelf: "flex-start",
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#FFBF00",
     color: "#4F4B4B",
+    marginLeft: 18,
   },
   messageText: { fontSize: 16, color: "white" },
   inputContainer: {
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#131314",
+    backgroundColor: "#707070",
     borderRadius: 10,
     height: 50,
     color: "white",

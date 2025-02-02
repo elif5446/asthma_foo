@@ -32,9 +32,11 @@ interface BottomSheetProps {
   searchLocation: Location | null;
 }
 
-const CustomSlider = () => {
-  const [value, setValue] = useState(0);
+interface CustomSliderProps {
+  aqiValue: number;
+}
 
+const CustomSlider: React.FC<CustomSliderProps> = ({ aqiValue }) => {
   // Define stop points as an array of objects with value and label
   const stopPoints = [
     { value: 0, label: "Normal" },
@@ -62,7 +64,7 @@ const CustomSlider = () => {
 
   // Find the label for the current value
   const currentLabel =
-    stopPoints.find((point) => Math.abs(point.value - value) < 0.1)?.label ||
+    stopPoints.find((point) => Math.abs(point.value - aqiValue) < 0.1)?.label ||
     "";
 
   // Function to determine AQI status based on the current value and patient condition
@@ -88,20 +90,23 @@ const CustomSlider = () => {
   };
 
   // Get the AQI status based on the current value and patient condition
-  const aqiStatus = getAqiStatus(value, currentLabel);
+  const aqiStatus = getAqiStatus(aqiValue, currentLabel);
 
   return (
     <View style={styles1.container}>
       <Text style={{ fontWeight: "bold" }}>
-        Value: {value} ({currentLabel})
+        Value: {aqiValue} ({currentLabel})
       </Text>
       <Slider
         style={{ width: 300, height: 40 }}
         minimumValue={0}
         maximumValue={100}
         step={1}
-        value={value}
-        onValueChange={(val) => setValue(snapValue(val))}
+        value={aqiValue}
+        onValueChange={(val) => {
+          // Optional: If you want the slider to update the AQI value
+          // You can pass a callback prop to update the parent state
+        }}
       />
       <View style={styles1.labelsContainer}>
         {stopPoints.map((point, index) => (
@@ -238,7 +243,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
               <Text style={styles.boldText}>CO: </Text>
               {airQualityData.data.iaqi.co?.v ?? "N/A"} ppm
             </Text>
-            <CustomSlider />
+            <CustomSlider aqiValue={airQualityData?.data?.aqi || 0} />
           </View>
         ) : (
           <Text>No air quality data available.</Text>
@@ -276,7 +281,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
             <Text style={styles.boldText}> under 9 ppm</Text>.
           </Text>
         </View>
-        <CustomSlider />
       </Animated.View>
     </GestureDetector>
   );
@@ -348,25 +352,78 @@ const styles = StyleSheet.create({
 });
 
 const styles1 = StyleSheet.create({
-  container: {
-    padding: 40,
-    alignItems: "center",
-  },
-  labelsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: 300,
-    marginTop: 10,
-  },
-  label: {
-    fontSize: 12,
-    color: "#000",
-    textAlign: "center",
-  },
   aqiStatus: {
     marginTop: 20,
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
+  },
+  container: {
+    width: "100%",
+    padding: 16,
+    marginTop: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  valueText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  conditionText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  slider: {
+    width: "100%",
+    height: 40,
+    marginTop: 80,
+  },
+  labelsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
+    paddingHorizontal: 8,
+  },
+  labelWrapper: {
+    alignItems: "center",
+    flex: 1,
+  },
+  marker: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginBottom: 4,
+  },
+  label: {
+    fontSize: 12,
+    color: "#4B5563",
+    textAlign: "center",
+  },
+  value: {
+    fontSize: 10,
+    color: "#6B7280",
+    marginTop: 2,
+  },
+  statusContainer: {
+    marginTop: 16,
+    padding: 8,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  statusText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 14,
   },
 });
